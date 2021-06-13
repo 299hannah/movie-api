@@ -56,6 +56,7 @@ class User(UserMixin,db.Model):
     bio=db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
     password_hash = db.Column(db.String(255))
+    reviews = db.relationship('Review',backref = 'user',lazy = 'dynamic')
 
     pass_secure = db.Column(db.String(255))
     
@@ -87,6 +88,14 @@ class Role(db.Model):
 class Review(db.Model):
 
     __tablename__='reviews'
+
+    def save_review(self):
+        db.session.add(self)
+        db.session.commit()
+    @classmethod
+    def get_reviews(cls,id):
+        reviews = Review.quert.filter_by(movie_id=id).all()
+        return reviews
 
     id = db.Column(db.Integer,primary_key = True)
     movie_id = db.Column(db.String)
