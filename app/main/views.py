@@ -3,7 +3,7 @@ from . import main
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm,UpdateProfile
 from ..models import Review
-from flask_login import login_required
+from flask_login import login_required,current_user
 from ..models import User
 from .. import db,photos
 
@@ -69,6 +69,11 @@ def new_review(movie_id):
         title = form.title.data
         review = form.review.data
         new_review =Review(movie.id,title,movie.poster,review)
+        
+        #update review
+        new_review = Review(movie_id=movie.id,movie_title=title,image_path=movie.poster,movie_review=review,user=current_user)
+        
+        #save review
         new_review.save_review()
         return redirect(url_for('movie',movie_id = movie.id))
 

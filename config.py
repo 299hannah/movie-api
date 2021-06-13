@@ -18,6 +18,7 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
 
+
 class ProdConfig(Config):
     '''
     production configuration child class
@@ -27,6 +28,10 @@ class ProdConfig(Config):
 
     '''
     pass
+
+class TestConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://james:password@localhost/watchlist_test'
+
 class DevConfig(Config):
     '''
     Development configuration child class
@@ -34,9 +39,11 @@ class DevConfig(Config):
         Args:
             Config: The parent configuration class with general configuration settings
     '''
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://james:password@localhost/watchlist'
     DEBUG = True 
 
 config_options = {
     'development':DevConfig,
-    'production':ProdConfig
+    'production':ProdConfig,
+    'test': TestConfig
 }
